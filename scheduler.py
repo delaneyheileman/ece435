@@ -39,4 +39,10 @@ p2 = Provider("Jane", 0, 1, [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [0, 0,
 c1 = Clinic("Clinic1", 1, 2, 3)
 c2 = Clinic("Clinic2", 1, 2, 3)
 
+Provider_List = [p1,p2]
+Clinic_List = [c1,c2]
 
+# provider location preferecene
+# is provier available for shift
+# does proiver have available hour
+# Shifts decrement total hour by 8
