@@ -31,14 +31,6 @@ class Clinic:
         self.max_staff = max_staff
         self.calendar = calendar
 
-
-# caltest = cal7()
-
-# caltest.week[0][0] = 'Ben'
-# caltest.week[0][1] = 'Alex'
-# print(caltest.week[0])
-
-
 p1 = Provider("John", 1, 2, [[1, 1], [0, 1], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40,
               Cal7.week)
 
@@ -53,34 +45,39 @@ c2 = Clinic("Clinic2", 1, 2, 3, Cal7.week)
 Provider_List = [p1, p2]
 Clinic_List = [c1, c2]
 
-# provider location preferecene
-# is provier available for shift
-# does proiver have available hour
+# provider location preference
+# is provider available for shift
+# does provider have available hour
 # Shifts decrement total hour by 8
 
 
-#     loop from monday to sunday
+# loop from monday to sunday
 #
-#         loop from clinic 1 to clinic 3
+# loop from clinic 1 to clinic 3
 #
-#             loop from am to pm
+# loop from am to pm
 #
-#                 loop through staff list
-#                     set specialty flag
-#                     decriment totals hours for staff member
-#                     add assignment to staff and clinic  calendars  (staff assingment appened to clinic day.shift.calendar array)
-#                     stop at optimal staff
+# loop through staff list
+# set specialty flag
+# reduces totals hours for staff member by 8
+# add assignment to staff and clinic  calendars  (staff assignment added to clinic day.shift.calendar array)
+# stop at optimal staff
 
 weekdays = [0, 1, 2, 3, 4, 5, 6, 7]
-shifts = ['AM', 'PM']
+shifts = [0, 1]
 
 for day in weekdays:
+    print(day)
 
     for clinic in Clinic_List:
+        print(clinic)
 
         for shift in shifts:
+            print(shift)
 
             for provider in Provider_List:
+                print(provider)
+
                 if provider.clinic_preference == clinic:
                     if provider.day_preferences[day][shift] == 1:
                         if provider.days_off[day] == 0:
