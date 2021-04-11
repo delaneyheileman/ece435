@@ -71,7 +71,7 @@ Clinic_List = [c1, c2]
 #                     add assignment to staff and clinic  calendars  (staff assingment appened to clinic day.shift.calendar array)
 #                     stop at optimal staff
 
-weekdays = [0, 1, 2, 3, 4
+weekdays = [0, 1, 2, 3, 4, 5, 6, 7]
 shifts = ['AM', 'PM']
 
 for day in weekdays:
