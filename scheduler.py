@@ -2,38 +2,34 @@ import string
 import numpy as np
 import calendar as cal
 
-class Output:
 
-    output_provider_AM = np.zeros((7,), dtype=int)
-    output_provider_PM = np.zeros((7,), dtype=int)
+class Output:
+    output_provider = np.zeros((7, 3), dtype=int)
 
 
 class Cal7:
-    week_am = np.zeros((7,), dtype=int)
-    week_pm = np.zeros((7,), dtype=int)
-
+    week = np.zeros((7, 3), dtype=int)
 
 
 class Provider:
-    def __init__(self, provider_name, specialty, clinic_preference, day_preferences, pm_day_preferences, days_off,
-                 total_available_hours, calendar_am, calendar_pm):
+    def __init__(self, provider_name, specialty, clinic_preference, day_preferences, days_off,
+                 total_available_hours, calendar):
         self.provider_name = provider_name
         self.specialty = specialty  # [Child,Adult,Family] Preferences will be indicated by 1
         self.clinic_preference = clinic_preference  # [Clinic1,Clinic2,Clinic3] Preference will be indicated by 1
         self.day_preferences = day_preferences  # [M,T,W,T,F,S,S] Preference will be indicated by 1
         self.days_off = days_off  # [M,T,W,T,F,S,S] Preference will be indicated by 1
         self.total_available_hours = total_available_hours
-        self.calendar_am = calendar_am
-        self.calendar_pm = calendar_pm
+        self.calendar = calendar
+
 
 class Clinic:
-    def __init__(self, clinic_name, min_staff, optimal_staff, max_staff, calendar_am, calendar_pm):
+    def __init__(self, clinic_name, min_staff, optimal_staff, max_staff, calendar):
         self.clinic_name = clinic_name
         self.min_staff = min_staff
         self.optimal_staff = optimal_staff
         self.max_staff = max_staff
-        self.calendar_am = calendar_am
-        self.calendar_pm = calendar_pm
+        self.calendar = calendar
 
 
 # caltest = cal7()
@@ -43,16 +39,19 @@ class Clinic:
 # print(caltest.week[0])
 
 
-p1 = Provider("John", 1, 2, [[1,1], [0,1], [1,1], [0,0], [1,1], [0,0], [0,0]], [0, 0, 0, 0, 0, 0, 0], 40, Cal7.week_am, Cal7.week_pm)
-p2 = Provider("Jane", 0, 1, [1, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0], 40,Cal7.week_am, Cal7.week_pm)
-c1 = Clinic("Clinic1", 1, 2, 3, Cal7.week_am, Cal7.week_pm)
-c2 = Clinic("Clinic2", 1, 2, 3, Cal7.week_am, Cal7.week_pm)
+p1 = Provider("John", 1, 2, [[1, 1], [0, 1], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40,
+              Cal7.week)
+
+p2 = Provider("Jane", 0, 1, [[0, 0], [1, 0], [0, 0], [1, 1], [0, 0], [1, 1], [1, 1]], [0, 0, 0, 0, 0, 0, 0], 40,
+              Cal7.week)
+
+c1 = Clinic("Clinic1", 1, 2, 3, Cal7.week)
+c2 = Clinic("Clinic2", 1, 2, 3, Cal7.week)
 
 # print(p1.provider_name,p1.specialty,p1.clinic_preference,p1.am_day_preferences[0], p1.calendar_am)
 
-Provider_List = [p1,p2]
-Clinic_List = [c1,c2]
-
+Provider_List = [p1, p2]
+Clinic_List = [c1, c2]
 
 # provider location preferecene
 # is provier available for shift
@@ -72,7 +71,7 @@ Clinic_List = [c1,c2]
 #                     add assignment to staff and clinic  calendars  (staff assingment appened to clinic day.shift.calendar array)
 #                     stop at optimal staff
 
-weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+weekdays = [0, 1, 2, 3, 4
 shifts = ['AM', 'PM']
 
 for day in weekdays:
@@ -83,15 +82,18 @@ for day in weekdays:
 
             for provider in Provider_List:
                 if provider.clinic_preference == clinic:
-                    if provider.day_preferences[day][shift] == [day,shift]:
-                        if provider.am_day_preferences[][shift] == shift:
+                    if provider.day_preferences[day][shift] == 1:
+                        if provider.days_off[day] == 0:
+                            if provider.total_available_hours >= 8:
+                                provider.total_available_hours = provider.total_available_hours - 8
+                                provider.calendar[day][shift] = provider.provider_name
+                                clinic.calendar[day][shift] = provider.provider_name
 
 
-
-
-                # Specialty_Flag()
-                # --l.total_available_hours
-
+print(c1.calendar)
+print(c2.calendar)
+print(p1.calendar)
+print(p2.calendar)
 
 
 # def schedule_output(x):
@@ -104,31 +106,5 @@ for day in weekdays:
 #     print('Optimal')
 # print(test)
 
-
-
-
 # if p1.day_preferences[1][1] == 1:
 #     print(True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
