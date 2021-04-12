@@ -3,11 +3,11 @@ import numpy as np
 import calendar as cal
 
 
-class Output:
-    output_provider = np.zeros((7, 3), dtype=int)
+# class Output:
+#     output_provider = np.zeros((7, 3), dtype=int)
 
 class Cal7:
-    week = np.empty(shape=(7, 3, 2), dtype='object')
+    week = np.empty(shape=(7, 2, 3), dtype='object')
 
 class Provider:
     def __init__(self, provider_name, specialty, clinic_preference, day_preferences, days_off,
@@ -29,12 +29,24 @@ class Clinic:
         self.max_staff = max_staff
         self.calendar = calendar
 
-p1 = Provider("John", 0, 1, [[1,' ', 0], [0,'' , 0], [1,'' , 0], [0,'' , 0], [1, '', 0], [0,'' , 0], [0,'' , 0]], [0, 0, 0, 0, 0, 0, 0], 40,
+def printer(clnc):
+    out = np.transpose(clnc)
+
+    print(out[0][0])
+    print(out[1][0])
+    print(out[2][0])
+    print("\n")
+    print(out[0][1])
+    print(out[1][1])
+    print(out[2][1])
+
+
+p1 = Provider("John", 0, 1, [[1, 1], [0, 1], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40,
               Cal7.week)
 
-p2 = Provider("Jane", 0, 1, [[1,' ', 1], [1,' ', 0], [0,' ', 0], [1,' ', 1], [0,' ', 0], [1,' ', 1], [1,' ', 1]], [0, 0, 0, 0, 0, 0, 0], 40,
+p2 = Provider("Jane", 0, 1, [[1, 1], [1, 0], [0, 0], [1, 1], [0, 0], [1, 1], [1, 1]], [0, 0, 0, 0, 0, 0, 0], 40,
               Cal7.week)
-p3 = Provider("Jill", 0, 1, [[1,' ', 1], [1,' ', 0], [0,' ', 0], [1,' ', 1], [0,' ', 0], [1,' ', 1], [1,' ', 1]], [0, 0, 0, 0, 0, 0, 0], 40,
+p3 = Provider("Jill", 0, 1, [[1, 1], [1, 0], [0, 0], [1, 1], [0, 0], [1, 1], [1, 1]], [0, 0, 0, 0, 0, 0, 0], 40,
               Cal7.week)
 
 c1 = Clinic(0, 1, 2, 3, Cal7.week)
@@ -66,24 +78,29 @@ Clinic_List = [c1, c2]
 weekdays = [0, 1, 2, 3, 4, 5, 6]
 shifts = [0, 1]
 slots = [0, 1, 2]
-
+o = []
 for day in weekdays:
     for clinic in Clinic_List:
         for shift in shifts:
             for slot in slots:
                 for provider in Provider_List:
                     if provider.clinic_preference == clinic.clinic_name:
-                        if provider.day_preferences[day][:][shift] == 1:
+                        if provider.day_preferences[day][shift] == 1:
                             if provider.days_off[day] == 0:
                                 if provider.total_available_hours >= 8:
-                                    if clinic.calendar[day][slot][shift] is None and provider.provider_name not in clinic.calendar[day][:][shift]:
-                                        # print(clinic.calendar[day][slot][:])
+                                    if clinic.calendar[day][shift][slot] is None and provider.provider_name not in clinic.calendar[day][shift]:
                                         provider.total_available_hours = provider.total_available_hours - 8
-                                        clinic.calendar[day][slot][shift] = provider.provider_name
+                                        clinic.calendar[day][shift][slot] = provider.provider_name
 
-#hi
-# print(clinic.calendar[day][slot][:])
-print("clinic1\n" + str(np.transpose(c1.calendar, axes=None)))
+printer(c1.calendar)
+print("\n")
+printer(c2.calendar)
+print("\n")
+
+# print("clinic1\n" + str(np.transpose(c1.calendar)))
+# out = np.transpose(c1.calendar)
+
+
 # print("clinic1\n" + str(c1.calendar))
 # print("\n")
 # print("clinic2\n" + str(c2.calendar))
