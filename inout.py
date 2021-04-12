@@ -31,13 +31,34 @@ def populateProviders(filename):
 
     return providerlist
 
+def populateClinics(filename):
+    clinicXL = pd.read_excel(filename)
+    cliniclist = []
+    for i in range(len(clinicXL.index)):
+        currentRow = clinicXL.loc[i]
+        name = currentRow["Clinic Name"]
+        minPed = []
+#        minAdult = []
+        optimalStaff = []
+        maxStaff = []
+        cliniclist.append(sch.Clinic(name, minPed, optimalStaff, maxStaff))
+
+    return cliniclist
+
+clinic_filename = "Clinic_Template.xlsx"
+cl = populateClinics(clinic_filename)
+
+for i in range(4):
+    print(cl[i].clinic_name, cl[i].min_staff,cl[i].optimal_staff, cl[i].max_staff,cl[i].calendar)
+
+
 
 ## The code below tests the populateProviders function and prints the objects to the terminal
 prov_filename = "Provider_Template.xlsx"
 pl = populateProviders(prov_filename)
 
 for i in range(3):
-    print(pl[i].provider_name, pl[i].specialty,pl[i].am_day_preferences, pl[i].pm_day_preferences, pl[i].days_off, pl[i].clinic_preference)
+    print(pl[i].provider_name, pl[i].specialty,pl[i].day_preferences, pl[i].pm_day_preferences, pl[i].days_off, pl[i].clinic_preference)
 
 
 # import csv
