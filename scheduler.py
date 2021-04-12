@@ -122,35 +122,3 @@ printer(c2.calendar)
 print("\n")
 print("Clinic 3:")
 printer(c3.calendar)
-
-
-# print("Clinic 2: \n", printer(c2.calendar))
-# printer(c2.calendar)
-
-
-# print("clinic1\n" + str(np.transpose(c1.calendar)))
-# out = np.transpose(c1.calendar)
-
-
-# print("clinic1\n" + str(c1.calendar))
-# print("\n")
-# print("clinic2\n" + str(c2.calendar))
-# print("\n")
-# print("provider1\n" + str(p1.calendar))
-# print("\n")
-# print("provider2\n" + str(p2.calendar))
-# print("\n")
-
-
-# def schedule_output(x):
-# test = []
-# for i in range(0, 6):
-#     test.append([])
-#
-# test[0].append(p1.provider_name)
-# if len(test[0]) == 3:
-#     print('Optimal')
-# print(test)
-
-# if p1.day_preferences[1][1] == 1:
-#     print(True)
