@@ -6,10 +6,8 @@ import calendar as cal
 class Output:
     output_provider = np.zeros((7, 3), dtype=int)
 
-
 class Cal7:
-    week = np.zeros((7, 3), dtype=int)
-
+    week = np.empty(shape=(2, 7), dtype='object')
 
 class Provider:
     def __init__(self, provider_name, specialty, clinic_preference, day_preferences, days_off,
@@ -31,14 +29,14 @@ class Clinic:
         self.max_staff = max_staff
         self.calendar = calendar
 
-p1 = Provider("John", 1, 2, [[1, 1], [0, 1], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40,
+p1 = Provider("John", 1, 0, [[1, 1], [0, 1], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40,
               Cal7.week)
 
 p2 = Provider("Jane", 0, 1, [[0, 0], [1, 0], [0, 0], [1, 1], [0, 0], [1, 1], [1, 1]], [0, 0, 0, 0, 0, 0, 0], 40,
               Cal7.week)
 
-c1 = Clinic("Clinic1", 1, 2, 3, Cal7.week)
-c2 = Clinic("Clinic2", 1, 2, 3, Cal7.week)
+c1 = Clinic(0, 1, 2, 3, Cal7.week)
+c2 = Clinic(1, 1, 2, 3, Cal7.week)
 
 # print(p1.provider_name,p1.specialty,p1.clinic_preference,p1.am_day_preferences[0], p1.calendar_am)
 
@@ -63,22 +61,14 @@ Clinic_List = [c1, c2]
 # add assignment to staff and clinic  calendars  (staff assignment added to clinic day.shift.calendar array)
 # stop at optimal staff
 
-weekdays = [0, 1, 2, 3, 4, 5, 6, 7]
+weekdays = [0, 1, 2, 3, 4, 5, 6]
 shifts = [0, 1]
 
 for day in weekdays:
-    print(day)
-
     for clinic in Clinic_List:
-        print(clinic)
-
         for shift in shifts:
-            print(shift)
-
             for provider in Provider_List:
-                print(provider)
-
-                if provider.clinic_preference == clinic:
+                if provider.clinic_preference == clinic.clinic_name:
                     if provider.day_preferences[day][shift] == 1:
                         if provider.days_off[day] == 0:
                             if provider.total_available_hours >= 8:
@@ -86,11 +76,14 @@ for day in weekdays:
                                 provider.calendar[day][shift] = provider.provider_name
                                 clinic.calendar[day][shift] = provider.provider_name
 
-
-print(c1.calendar)
-print(c2.calendar)
-print(p1.calendar)
-print(p2.calendar)
+print("clinic1\n" + str(c1.calendar))
+print("\n")
+print("clinic2\n" + str(c2.calendar))
+print("\n")
+print("provider1\n" + str(p1.calendar))
+print("\n")
+print("provider2\n" + str(p2.calendar))
+print("\n")
 
 
 # def schedule_output(x):
