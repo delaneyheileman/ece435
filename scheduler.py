@@ -32,10 +32,11 @@ class Clinic:
 def printer(clnc):
     out = np.transpose(clnc)
 
+    print("AM")
     print(out[0][0])
     print(out[1][0])
     print(out[2][0])
-    print("\n")
+    print("\nPM")
     print(out[0][1])
     print(out[1][1])
     print(out[2][1])
@@ -78,7 +79,7 @@ Clinic_List = [c1, c2]
 weekdays = [0, 1, 2, 3, 4, 5, 6]
 shifts = [0, 1]
 slots = [0, 1, 2]
-o = []
+
 for day in weekdays:
     for clinic in Clinic_List:
         for shift in shifts:
@@ -92,10 +93,16 @@ for day in weekdays:
                                         provider.total_available_hours = provider.total_available_hours - 8
                                         clinic.calendar[day][shift][slot] = provider.provider_name
 
+print("\n")
+print("Clinic 1:")
 printer(c1.calendar)
+
 print("\n")
+print("Clinic 2:")
 printer(c2.calendar)
-print("\n")
+# print("Clinic 2: \n", printer(c2.calendar))
+# printer(c2.calendar)
+
 
 # print("clinic1\n" + str(np.transpose(c1.calendar)))
 # out = np.transpose(c1.calendar)
