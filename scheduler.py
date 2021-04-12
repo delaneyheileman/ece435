@@ -3,11 +3,11 @@ import numpy as np
 import calendar as cal
 
 
-class Output:
-    output_provider = np.zeros((7, 3), dtype=int)
+# class Output:
+#     output_provider = np.zeros((7, 3), dtype=int)
 
 class Cal7:
-    week = np.empty(shape=(2, 3, 7), dtype='object')
+    week = np.empty(shape=(7, 2, 3), dtype='object')
 
 class Provider:
     def __init__(self, provider_name, specialty, clinic_preference, day_preferences, days_off,
@@ -28,6 +28,18 @@ class Clinic:
         self.optimal_staff = optimal_staff
         self.max_staff = max_staff
         self.calendar = calendar
+
+def printer(clnc):
+    out = np.transpose(clnc)
+
+    print(out[0][0])
+    print(out[1][0])
+    print(out[2][0])
+    print("\n")
+    print(out[0][1])
+    print(out[1][1])
+    print(out[2][1])
+
 
 p1 = Provider("John", 0, 1, [[1, 1], [0, 1], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40,
               Cal7.week)
@@ -66,7 +78,7 @@ Clinic_List = [c1, c2]
 weekdays = [0, 1, 2, 3, 4, 5, 6]
 shifts = [0, 1]
 slots = [0, 1, 2]
-
+o = []
 for day in weekdays:
     for clinic in Clinic_List:
         for shift in shifts:
@@ -80,8 +92,15 @@ for day in weekdays:
                                         provider.total_available_hours = provider.total_available_hours - 8
                                         clinic.calendar[day][shift][slot] = provider.provider_name
 
+printer(c1.calendar)
+print("\n")
+printer(c2.calendar)
+print("\n")
 
-print("clinic1\n" + str(np.transpose(c1.calendar, axes=None)))
+# print("clinic1\n" + str(np.transpose(c1.calendar)))
+# out = np.transpose(c1.calendar)
+
+
 # print("clinic1\n" + str(c1.calendar))
 # print("\n")
 # print("clinic2\n" + str(c2.calendar))
