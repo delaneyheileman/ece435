@@ -81,7 +81,7 @@ for day in weekdays:
                                         provider.total_available_hours = provider.total_available_hours - 8
                                         clinic.calendar[day][slot][shift] = provider.provider_name
 
-
+#hi
 # print(clinic.calendar[day][slot][:])
 print("clinic1\n" + str(np.transpose(c1.calendar, axes=None)))
 # print("clinic1\n" + str(c1.calendar))
