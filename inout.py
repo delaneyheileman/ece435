@@ -32,7 +32,7 @@ def populateProviders(filename):
         # Total available hours
         availHours = currentRow["Hour Limit"]
         # Construct new object and add to providerlist output
-        providerlist.append(sch.Provider(name, spec, clPref, dayPref, daysOff, availHours, sch.Cal7.week))
+        providerlist.append(sch.Provider(name, spec, clPref, dayPref, daysOff, availHours,))
 
     return providerlist
 
@@ -46,14 +46,14 @@ def populateClinics(filename):
 #        minAdult = []
         optimalStaff = []
         maxStaff = []
-        cliniclist.append(sch.Clinic(name, minPed, optimalStaff, maxStaff))
+        cliniclist.append(sch.Clinic(name, minPed, optimalStaff, maxStaff, sch.Cal7.week))
 
     return cliniclist
 
 clinic_filename = "Clinic_Template.xlsx"
 cl = populateClinics(clinic_filename)
 
-for i in range(4):
+for i in range(3):
     print(cl[i].clinic_name, cl[i].min_staff,cl[i].optimal_staff, cl[i].max_staff,cl[i].calendar)
 
 
