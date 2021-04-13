@@ -32,7 +32,7 @@ def populateProviders(filename):
         # Total available hours
         availHours = currentRow["Hour Limit"]
         # Construct new object and add to providerlist output
-        providerlist.append(sch.Provider(name, spec, clPref, dayPref, daysOff, availHours,))
+        providerlist.append(sch.Provider(name, spec, clPref, dayPref, daysOff, availHours))
 
     return providerlist
 
@@ -42,10 +42,10 @@ def populateClinics(filename):
     for i in range(len(clinicXL.index)):
         currentRow = clinicXL.loc[i]
         name = currentRow["Clinic Name"]
-        minPed = []
-#        minAdult = []
-        optimalStaff = []
-        maxStaff = []
+        minPed = currentRow[1]
+        minAdult = currentRow[2]
+        optimalStaff = currentRow[3]
+        maxStaff = currentRow[4]
         cliniclist.append(sch.Clinic(name, minPed, optimalStaff, maxStaff, sch.Cal7.week))
 
     return cliniclist
@@ -54,7 +54,7 @@ clinic_filename = "Clinic_Template.xlsx"
 cl = populateClinics(clinic_filename)
 
 for i in range(3):
-    print(cl[i].clinic_name, cl[i].min_staff,cl[i].optimal_staff, cl[i].max_staff,cl[i].calendar)
+    print(cl[i].clinic_name, cl[i].min_staff,cl[i].optimal_staff, cl[i].max_staff)
 
 
 
@@ -63,7 +63,7 @@ prov_filename = "Provider_Template.xlsx"
 pl = populateProviders(prov_filename)
 
 for i in range(3):
-    print(pl[i].provider_name, pl[i].specialty,pl[i].day_preferences, pl[i].pm_day_preferences, pl[i].days_off, pl[i].clinic_preference)
+    print(f'{pl[i].provider_name}, {pl[i].specialty},{pl[i].day_preferences}, {pl[i].pm_day_preferences}, {pl[i].days_off}, {pl[i].clinic_preference}')
 
 
 # import csv
