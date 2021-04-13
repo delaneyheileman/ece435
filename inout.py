@@ -5,29 +5,34 @@ import scheduler as sch
 ## Given the file name (.xlsx) where provider profiles are stored,
 ## returns a list of provider objects
 def populateProviders(filename):
+
     provXL = pd.read_excel(filename)
     providerlist = []
     for i in range(len(provXL.index)):
         currentRow = provXL.loc[i]
         name = currentRow["First"] + " " + currentRow["Last"]
         spec = currentRow["Specialty"]
-        amPref = []
-        pmPref = []
         clPref = []
+        dayPref = [[]]
+        for n in range(7):
+            dayPref.append([])
         daysOff = [0] * 7
-        # Day preferences will be in a [ [am,pm], [am,pm] ...] format, this needs to be updated
         for j in range(3):
             clPref.append(currentRow[18+j])
+        # Day preferences are in [ [am,pm], [am,pm] ...] format
+        # AM Day preferences
         for k in range(7):
-            amPref.append(currentRow[4+2*k])
+            dayPref[k].append(currentRow[4+2*k])
+        # PM Day preferences
         for l in range(7):
-            pmPref.append(currentRow[5+2*l])
+            dayPref[l].append(currentRow[5+2*l])
             # If both am and pm preference is 0, flag this as a day off
-            if (pmPref[l] == 0) & (amPref[l] == 0):
+            if (dayPref[l][0] == 0) & (dayPref[l][1] == 0):
                 daysOff[l] = 1
-
+        # Total available hours
         availHours = currentRow["Hour Limit"]
-        providerlist.append(sch.Provider(name, spec, clPref, amPref, pmPref, daysOff, availHours))
+        # Construct new object and add to providerlist output
+        providerlist.append(sch.Provider(name, spec, clPref, dayPref, daysOff, availHours, sch.Cal7.week))
 
     return providerlist
 
