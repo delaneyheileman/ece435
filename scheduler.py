@@ -40,7 +40,7 @@ def printer(clnc):
     print(out[2][1])
 
 
-p1 = Provider("John", 0, 0, [[0, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40)
+p1 = Provider(",John" 0, 0, [[0, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40)
 p2 = Provider("Jane", 0, 0, [[0, 0], [0, 1], [0, 1], [0, 1], [0, 1], [0, 1], [0, 0]], [0, 0, 0, 0, 0, 0, 0], 40)
 p3 = Provider("Jill", 0, 0, [[1, 0], [1, 0], [1, 0], [1, 0], [0, 0], [0, 0], [1, 0]], [0, 0, 0, 0, 0, 0, 0], 40)
 p4 = Provider("Jake", 0, 0, [[1, 0], [1, 0], [0, 0], [0, 0], [1, 0], [1, 0], [1, 0]], [0, 0, 0, 0, 0, 0, 0], 40)
@@ -109,7 +109,7 @@ for day in weekdays:
                                     if clinic.calendar[day][shift][slot] is None and provider.provider_name not in\
                                             clinic.calendar[day][shift]:
                                         provider.total_available_hours = provider.total_available_hours - 8
-                                        clinic.calendar[day][shift][slot] = provider.provider_name
+                                        clinic.calendar[day][shift][slot] = str(provider.provider_name) + str(provider.specialty)
 
 print("\n")
 print("Clinic 1:")
