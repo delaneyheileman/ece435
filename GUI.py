@@ -5,24 +5,26 @@ from scheduler import scheduler
 from inout import populateProviders
 from inout import populateClinics
 
+
 def open_provider():
 
     provider_filepath = askopenfilename(
         filetypes=[("Excel Files", "*.xlsx")]
-        providerlist = populateProviders(provider_filepath)
     )
     if not provider_filepath:
         return
     lbl_provider["text"] = provider_filepath
 
+
+
 def open_clinic():
     """Open a file for editing."""
     clinic_filepath = askopenfilename(
         filetypes=[("Excel Files", "*.xlsx")]
-        cliniclist = populateClinics(clinic_filepath)
     )
     if not clinic_filepath:
         return
+    cliniclist = populateClinics(clinic_filepath)
     lbl_clinic["text"] = clinic_filepath
 
 scheduler(providerlist, clinic)
