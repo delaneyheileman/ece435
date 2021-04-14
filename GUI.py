@@ -6,16 +6,26 @@ from inout import populateProviders
 from inout import populateClinics
 
 def open_provider():
-    provider_filepath = "Provider_Template.xlsx"
-    providerlist = populateProviders(provider_filepath)
+
+    provider_filepath = askopenfilename(
+        filetypes=[("Excel Files", "*.xlsx")]
+        providerlist = populateProviders(provider_filepath)
+    )
+    if not provider_filepath:
+        return
     lbl_provider["text"] = provider_filepath
 
 def open_clinic():
-    clinic_filepath = "Clinic_Template.xlsx"
-    cliniclist = populateClinics(clinic_filepath)
+    """Open a file for editing."""
+    clinic_filepath = askopenfilename(
+        filetypes=[("Excel Files", "*.xlsx")]
+        cliniclist = populateClinics(clinic_filepath)
+    )
+    if not clinic_filepath:
+        return
     lbl_clinic["text"] = clinic_filepath
 
-scheduler(providerlist, cliniclist)
+scheduler(providerlist, clinic)
 
 def run():
     lbl_result["text"] = f"Scheduler Ran Successfully"
