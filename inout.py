@@ -11,7 +11,7 @@ def populateProviders(filename):
     for i in range(len(provXL.index)):
         currentRow = provXL.loc[i]
         name = currentRow["First"] + " " + currentRow["Last"]
-        spec = currentRow["Specialty"]
+        spec = currentRow[2]
         clPref = []
         # Build empty dayPref array
         dayPref = [[]]
@@ -23,10 +23,10 @@ def populateProviders(filename):
         # Day preferences are in [ [am,pm], [am,pm] ...] format
         # AM Day / Location preferences
         for k in range(7):
-            dayPref[k].append(currentRow[4+2*k])
+            dayPref[k].append(currentRow[3+2*k])
         # PM Day preferences
         for l in range(7):
-            dayPref[l].append(currentRow[5+2*l])
+            dayPref[l].append(currentRow[4+2*l])
             # If both am and pm preference is 0, flag this as a day off
             # if (dayPref[l][0] == ) & (dayPref[l][1] == 0):
             #     daysOff[l] = 1
@@ -64,8 +64,8 @@ for i in range(3):
 prov_filename = "Provider_Template.xlsx"
 pl = populateProviders(prov_filename)
 
-for i in range(3):
-    print(f'{pl[i].provider_name}, {pl[i].specialty},{pl[i].day_preferences}, {pl[i].pm_day_preferences}, {pl[i].days_off}, {pl[i].clinic_preference}')
+for i in range(12):
+    print(f'{pl[i].provider_name}, {pl[i].specialty},{pl[i].day_preferences}, {pl[i].total_available_hours}')
 
 
 # import csv
