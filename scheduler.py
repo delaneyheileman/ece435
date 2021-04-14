@@ -196,22 +196,22 @@ def scheduler(provider_list, clinic_list):
     slots = [0, 1, 2]
 
     for day in weekdays:
-        for clinic_idx in clinic_list:
+        for clinic in clinic_list:
             for shift in shifts:
                 for slot in slots:
-                    for provider_idx in provider_list:
+                    for provider in provider_list:
                         if calendar.index[calendar["Is_Holiday"] == 1].values[0] == day:
-                            clinic_idx.week[day][:][:] = "Holiday"
-                            if provider_idx.day_preferences[day][shift] != clinic_idx.clinic_name:
-                                provider_idx.week[day][shift] = provider_idx.day_preferences[day][shift]
+                            clinic.week[day][:][:] = "Holiday"
+                            if provider.day_preferences[day][shift] != clinic.clinic_name:
+                                provider.week[day][shift] = provider.day_preferences[day][shift]
                             else:
-                                if provider_idx.total_available_hours >= 4:
-                                    if clinic_idx.week[day][shift][slot] is None and provider_idx.provider_name not in \
-                                            clinic_idx.week[day][shift]:
-                                        if clinic_idx.staff_logic(provider_idx.specialty, day, shift):
-                                            provider_idx.total_available_hours = provider_idx.total_available_hours - 4
-                                            clinic_idx.week[day][shift][slot] = provider_idx.provider_name
-                                            provider_idx.week[day][shift] = provider_idx.day_preferences
+                                if provider.total_available_hours >= 4:
+                                    if clinic.week[day][shift][slot] is None and provider.provider_name not in \
+                                            clinic.week[day][shift]:
+                                        if clinic.staff_logic(provider.specialty, day, shift):
+                                            provider.total_available_hours = provider.total_available_hours - 4
+                                            clinic.week[day][shift][slot] = provider.provider_name
+                                            provider.week[day][shift] = provider.day_preferences
     for clinic in clinic_list:
         print("\n")
         print(clinic.clinic_name)
