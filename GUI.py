@@ -8,7 +8,7 @@ from inout import populateClinics
 
 def open_provider():
 
-    provider_filepath = askopenfilename(
+    global provider_filepath = askopenfilename(
         filetypes=[("Excel Files", "*.xlsx")]
     )
     if not provider_filepath:
@@ -19,17 +19,18 @@ def open_provider():
 
 def open_clinic():
     """Open a file for editing."""
-    clinic_filepath = askopenfilename(
+    global clinic_filepath = askopenfilename(
         filetypes=[("Excel Files", "*.xlsx")]
     )
     if not clinic_filepath:
         return
-    cliniclist = populateClinics(clinic_filepath)
+    # cliniclist = populateClinics(clinic_filepath)
     lbl_clinic["text"] = clinic_filepath
 
-scheduler(providerlist, clinic)
-
 def run():
+    providerlist = populateProviders(provider_filepath)
+    cliniclist = populateClinics(clinic_filepath)
+    scheduler(providerlist, clinic)
     lbl_result["text"] = f"Scheduler Ran Successfully"
 
 
