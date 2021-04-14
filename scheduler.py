@@ -104,6 +104,7 @@ class Satellite_clinic(Clinic):
 
 def clinic_printer(clnc):
     out = np.transpose(clnc)
+    out = np.array(out)
 
     print("AM")
     print(out[0][0])
@@ -117,6 +118,7 @@ def clinic_printer(clnc):
 
 def provider_printer(clnc):
     out = np.transpose(clnc)
+    out = np.array(out)
     print("AM")
     print(out[0][:])
     print("\nPM")
@@ -126,98 +128,36 @@ def provider_printer(clnc):
 calendar = calendar_generator(year, month_start, month_end, day_start, day_end)
 
 
-# 0 Scheduled Day Off (SDO)
-# 1 Crownpoint Healthcare Facility (CHCF)
-# 2 Thoreau Health Station (THS)
-# 3 Pueblo Pintado Health Center (PPH)
-# 4 No Preference (NP)
-# 5 Administrative Time (Adm)
-# 6 Approved Leave (AL)
-# 7 Continuing Medical Education (CME)
-# 8 General Staff Meeting (GME)
-# PPH = "PPHC"
+def scheduler(Provider_List, Clinic_List):
 
-# p1 = Provider("Colgan", "PED", [["SDO", "SDO"], ["CHCF", "CHCF"], ["SDO", "SDO"], ["SDO", "SDO"], ["CHCF", "Adm"], ["CHCF", "Adm"],["SDO", "SDO"]], 40)
-#
-# p2 = Provider("Jones", "PED", [["SDO", "SDO"], ["SDO", "SDO"], ["CHCF", "CHCF"], ["Adm", "CHCF"], [PPH, PPH], ["CHCF", "CHCF"], ["SDO", "SDO"]], 40)
-#
-# p3 = Provider("Zelleke", "PED",
-#               [["SDO", "SDO"], ["SDO", "SDO"], ["SDO", "SDO"], ["THS", "THS"], ["CHCF", "CHCF"], ["THS", "THS"],
-#                ["SDO", "SDO"]], 40)
-#
-# p4 = Provider("Fraser", "FP",
-#               [["SDO", "SDO"], ["SDO", "SDO"], ["SDO", "SDO"], ["Adm", "CHCF"], ["Adm", "CHCF"], ["CHCF", "CHCF"],
-#                ["SDO", "SDO"]], 40)
-#
-# p5 = Provider("Garza", "FP",
-#               [["SDO", "SDO"], ["CHCF", "CHCF"], ["CHCF", "CHCF"], ["Adm", "Adm"], ["CHCF", "Adm"], ["SDO", "SDO"],
-#                ["SDO", "SDO"]], 40)
-#
-# p6 = Provider("Haley", "FP", [["SDO", "SDO"], ["AL", "AL"], ["AL", "AL"], ["AL", "AL"], ["SDO", "SDO"], ["SDO", "SDO"],
-#                               ["SDO", "SDO"]], 40)
-#
-# p7 = Provider("Veal", "FP",
-#               [["SDO", "SDO"], [PPH, PPH], ["SDO", "SDO"], [PPH, PPH], [PPH, PPH], ["Adm", "Adm"],
-#                ["SDO", "SDO"]], 40)
-#
-# p8 = Provider("Wilkerson", "FP",
-#               [["SDO", "SDO"], ["SDO", "SDO"], ["SDO", "SDO"], ["Adm", "Adm"], ["CHCF", "Adm"], ["CHCF", "Adm"],
-#                ["SDO", "SDO"]], 40)
-#
-# p9 = Provider("Littlejohn", "FP",
-#               [["SDO", "SDO"], ["THS", "THS"], ["THS", "THS"], ["THS", "THS"], ["THS", "THS"], ["THS", "THS"],
-#                ["SDO", "SDO"]], 40)
-#
-# p10 = Provider("Willie", "FP",
-#                [["SDO", "SDO"], ["SDO", "SDO"], ["SDO", "SDO"], ["THS", "THS"], ["SDO", "SDO"], ["SDO", "SDO"],
-#                 ["SDO", "SDO"]], 40)
-#
-# p11 = Provider("Stochosky", "FP",
-#                [["SDO", "SDO"], ["SDO", "SDO"], [PPH, PPH], ["SDO", "SDO"], ["SDO", "SDO"], [PPH, PPH],
-#                 ["SDO", "SDO"]], 40)
-#
-# p12 = Provider("Phillip", "IM",
-#                [["SDO", "SDO"], ["CHCF", "CHCF"], ["CHCF", "CHCF"], ["Adm", "CHCF"], ["Adm", "CHCF"], ["CHCF", "CHCF"],
-#                 ["SDO", "SDO"]], 40)
-#
-# c1 = Clinic("CHCF", 1, 1, 2, 3, 5)
-#
-# c2 = Satellite_clinic("THS", 1, 1, 3, 3, 3)
-#
-# c3 = Satellite_clinic("PPH", 1, 1, 3, 3, 3)
-#
-# Provider_List = [p1,p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12]
-# Clinic_List = [c1, c2, c3]
-
-
-def scheduler(provider_list, clinic_list):
     weekdays = [0, 1, 2, 3, 4, 5, 6]
     shifts = [0, 1]
     slots = [0, 1, 2]
 
     for day in weekdays:
-        for clinic in clinic_list:
+        for clinic in Clinic_List:
             for shift in shifts:
                 for slot in slots:
-                    for provider in provider_list:
+                    for provider in Provider_List:
                         if calendar.index[calendar["Is_Holiday"] == 1].values[0] == day:
                             clinic.week[day][:][:] = "Holiday"
-                            if provider.day_preferences[day][shift] != clinic.clinic_name:
-                                provider.week[day][shift] = provider.day_preferences[day][shift]
-                            else:
-                                if provider.total_available_hours >= 4:
-                                    if clinic.week[day][shift][slot] is None and provider.provider_name not in \
-                                            clinic.week[day][shift]:
-                                        if clinic.staff_logic(provider.specialty, day, shift):
-                                            provider.total_available_hours = provider.total_available_hours - 4
-                                            clinic.week[day][shift][slot] = provider.provider_name
-                                            provider.week[day][shift] = provider.day_preferences
-    for clinic in clinic_list:
+                        if provider.day_preferences[day][shift] != clinic.clinic_name:
+                            provider.week[day][shift] = provider.day_preferences[day][shift]
+                        else:
+                            if provider.total_available_hours >= 4:
+                                if clinic.week[day][shift][slot] is None and provider.provider_name not in \
+                                        clinic.week[day][shift]:
+                                    if clinic.staff_logic(provider.specialty, day, shift):
+                                        provider.total_available_hours = provider.total_available_hours - 4
+                                        clinic.week[day][shift][slot] = provider.provider_name
+                                        provider.week[day][shift] = provider.day_preferences
+
+    for clinic in Clinic_List:
         print("\n")
         print(clinic.clinic_name)
         clinic_printer(clinic.week)
 
-    for provider in provider_list:
+    for provider in Provider_List:
         print("\n")
         print(provider.provider_name)
         provider_printer(provider.week)
