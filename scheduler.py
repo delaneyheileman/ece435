@@ -117,11 +117,10 @@ def clinic_printer(clnc):
 
 def provider_printer(clnc):
     out = np.transpose(clnc)
-    print(out)
-    # print("AM")
-    # print(out[0][:])
-    # print("\nPM")
-    # print(out[1][:])
+    print("AM")
+    print(out[0][:])
+    print("\nPM")
+    print(out[1][:])
 
 
 calendar = calendar_generator(year, month_start, month_end, day_start, day_end)
@@ -211,10 +210,10 @@ for day in weekdays:
                                     clinic.week[day][shift][slot] = provider.provider_name
                                     provider.week[day][shift] = provider.day_preferences
 
-# for clinic in Clinic_List:
-#     print("\n")
-#     print(clinic.clinic_name)
-#     clinic_printer(clinic.week)
+for clinic in Clinic_List:
+    print("\n")
+    print(clinic.clinic_name)
+    clinic_printer(clinic.week)
 
 for provider in Provider_List:
     print("\n")
