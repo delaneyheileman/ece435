@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
+import inout.py
 
 def open_provider():
     """Open a file for editing."""
@@ -17,7 +18,7 @@ def open_clinic():
     )
     if not clinic_filepath:
         return
-    lbl_clinic["text"] = clinic_filepath   
+    lbl_clinic["text"] = clinic_filepath
 
 def run():
     lbl_result["text"] = f"Scheduler Ran Successfully"
