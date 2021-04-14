@@ -45,9 +45,10 @@ def populateClinics(filename):
         name = currentRow["Clinic Name"]
         minPed = currentRow[1]
         minAdult = currentRow[2]
-        optimalStaff = currentRow[3]
-        maxStaff = currentRow[4]
-        cliniclist.append(sch.Clinic(name, minPed, optimalStaff, maxStaff, sch.Cal7.week))
+        idealPed = currentRow[3]
+        idealAdult = currentRow[4]
+        maxStaff = currentRow[5]
+        cliniclist.append(sch.Clinic(name, minPed, minAdult, idealPed, idealAdult, maxStaff))
 
     return cliniclist
 
@@ -55,7 +56,7 @@ clinic_filename = "Clinic_Template.xlsx"
 cl = populateClinics(clinic_filename)
 
 for i in range(3):
-    print(cl[i].clinic_name, cl[i].min_staff,cl[i].optimal_staff, cl[i].max_staff)
+    print(cl[i].clinic_name, cl[i].min_ped, cl[i].min_aud, cl[i].idl_ped, cl[i].idl_aud, cl[i].max_staff)
 
 
 
