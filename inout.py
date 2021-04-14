@@ -13,26 +13,27 @@ def populateProviders(filename):
         name = currentRow["First"] + " " + currentRow["Last"]
         spec = currentRow["Specialty"]
         clPref = []
+        # Build empty dayPref array
         dayPref = [[]]
         for n in range(7):
             dayPref.append([])
         daysOff = [0] * 7
-        for j in range(3):
-            clPref.append(currentRow[18+j])
+        # for j in range(3):
+        #     clPref.append(currentRow[18+j])
         # Day preferences are in [ [am,pm], [am,pm] ...] format
-        # AM Day preferences
+        # AM Day / Location preferences
         for k in range(7):
             dayPref[k].append(currentRow[4+2*k])
         # PM Day preferences
         for l in range(7):
             dayPref[l].append(currentRow[5+2*l])
             # If both am and pm preference is 0, flag this as a day off
-            if (dayPref[l][0] == 0) & (dayPref[l][1] == 0):
-                daysOff[l] = 1
+            # if (dayPref[l][0] == ) & (dayPref[l][1] == 0):
+            #     daysOff[l] = 1
         # Total available hours
         availHours = currentRow["Hour Limit"]
         # Construct new object and add to providerlist output
-        providerlist.append(sch.Provider(name, spec, clPref, dayPref, daysOff, availHours))
+        providerlist.append(sch.Provider(name, spec, dayPref, availHours))
 
     return providerlist
 
