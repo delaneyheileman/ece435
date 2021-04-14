@@ -157,7 +157,7 @@ def scheduler(Provider_List, Clinic_List):
         print(clinic.clinic_name)
         clinic_printer(clinic.week)
 
-    for provider in Provider_List:
-        print("\n")
-        print(provider.provider_name)
-        provider_printer(provider.week)
+    # for provider in Provider_List:
+    #     print("\n")
+    #     print(provider.provider_name)
+    #     provider_printer(provider.week)
