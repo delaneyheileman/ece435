@@ -1,9 +1,16 @@
-#last UD 4/11/21 4:39 pm
+#last UD 4/26/2021 4:09 PM
 import pandas as pd
 import scheduler as sch
+import datetime
 
-## Given the file name (.xlsx) where provider profiles are stored,
-## returns a list of provider objects
+# populateProviders()
+# Inputs:
+#   filename : a string with the name of the file containing provider profile information
+# Outputs:
+#     providerList : a list of scheduler.Clinic objects
+#
+# Reads the provider profile data from an excel file (.xlsx) and populates a list
+# of scheduler.Provider objects, then returns this list
 def populateProviders(filename):
 
     provXL = pd.read_excel(filename)
@@ -30,9 +37,19 @@ def populateProviders(filename):
 
     return providerlist
 
+
+# populateClinics()
+# Inputs:
+#   filename : a string with the name of the file containing clinic profile information
+# Outputs:
+#     clinicList : a list of scheduler.Clinic objects
+#
+# Reads the clinic profile data from an excel file (.xlsx) and populates a list
+# of scheduler.Clinic objects, then returns this list
+
 def populateClinics(filename):
     clinicXL = pd.read_excel(filename)
-    cliniclist = []
+    clinicList = []
     for i in range(len(clinicXL.index)):
         currentRow = clinicXL.loc[i]
         name = currentRow["Clinic Name"]
@@ -41,6 +58,62 @@ def populateClinics(filename):
         idealPed = currentRow[3]
         idealAdult = currentRow[4]
         maxStaff = currentRow[5]
-        cliniclist.append(sch.Clinic(name, minPed, minAdult, idealPed, idealAdult, maxStaff))
+        clinicList.append(sch.Clinic(name, minPed, minAdult, idealPed, idealAdult, maxStaff))
 
-    return cliniclist
+    return clinicList
+
+# outputClinicSchedule()
+# Inputs:
+#   clinicList : a list of scheduler.Clinic objects
+#   fileName : a string with the target excel file name
+#   startDate : a datetime.date object with the starting date of the schedule
+# Outputs: None
+#
+# Overwrites (or creates if it doesn't exist) an excel file with the
+# schedule contained in the week attributes of the Clinic objects in clinicList
+def outputClinicSchedule(clinicList, fileName, startDate):
+    file = open(fileName, "w")
+    # In the datetime module, Monday = 0 and Sunday = 6
+    weekdays = ["Mon","Tue","Wed","Thu","Fri","Sat", "Sun"]
+    colHeaders = []
+    colHeaders.append("Day")
+    # Column names, 3 slots per clinic per day
+    for clinic in clinicList:
+        for i in range(3):
+            colHeaders.append(clinic.clinic_name + " " + str(i+1))
+    # Row labels, each row is a day, label format "Weekday {mo}/{day}"
+    dayStrings = []
+    for i in range(7):
+        tempDay = startDate + datetime.timedelta(days=i)
+        dayStrings.append(weekdays[tempDay.weekday()] + " " + str(tempDay.month) +
+        "/" + str(tempDay.day) + " AM")
+        dayStrings.append(weekdays[tempDay.weekday()] + " " + str(tempDay.month) +
+        "/" + str(tempDay.day) + " PM")
+
+    # Create a new DataFrame object to contain the schedule
+    schedOut = pd.DataFrame(columns=colHeaders)
+    rowCounter = 0;
+
+    for day in range(7):
+        for shift in range(2):
+            row = []
+            row.append(dayStrings[rowCounter])
+            for clinic in clinicList:
+                for slot in range(3):
+                    row.append(clinic.week[day][shift][slot])
+            schedOut.loc[rowCounter] = row;
+            rowCounter += 1
+
+    schedOutXL = schedOut.set_index('Day', drop=True)
+    schedOutXL.to_excel(fileName)
+    return;
+
+
+# Test code for outputClinicSchedule()
+# This test requires that the scheduler.scheduler() function return the
+# list of Clinic objects (Clinic_List) that it modifies
+startDate = datetime.date(2021,4,26)
+clinicsIn = populateClinics("Clinic_Template.xlsx")
+providersIn = populateProviders("Provider_Template.xlsx")
+clinicsOut = sch.scheduler(providersIn, clinicsIn)
+outputClinicSchedule(clinicsOut, "Testing123.xlsx", startDate)
