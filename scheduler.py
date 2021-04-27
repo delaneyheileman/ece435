@@ -27,12 +27,13 @@ def calendar_generator(Year, Start_Month, End_Month, Start_Day, End_Day):
 
 
 class Provider:
-    def __init__(self, provider_name, specialty, day_preferences, total_available_hours):
+    def __init__(self, provider_name, specialty, day_preferences, total_available_hours, priority):
         self.provider_name = provider_name
         self.specialty = specialty
         self.day_preferences = day_preferences
         self.total_available_hours = total_available_hours
         self.week = np.empty(shape=(7, 2), dtype="object")
+        self.priority = priority
 
 
 class Clinic:
