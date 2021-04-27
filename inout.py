@@ -2,6 +2,21 @@
 import pandas as pd
 import scheduler as sch
 import datetime
+import random
+
+# randomizeList()
+# Inputs:
+#     providerList : a list of objects
+# Outputs:
+#     randomList : a list containing the elements of the input list in randomized order
+
+def randomizeList(inputList):
+    randomList = []
+    numObjects = len(inputList)
+    for i in range(numObjects):
+        indexSelect = random.randrange(0,len(inputList))
+        randomList.append(inputList.pop(indexSelect))
+    return randomList
 
 # populateProviders()
 # Inputs:
@@ -112,8 +127,17 @@ def outputClinicSchedule(clinicList, fileName, startDate):
 # Test code for outputClinicSchedule()
 # This test requires that the scheduler.scheduler() function return the
 # list of Clinic objects (Clinic_List) that it modifies
-startDate = datetime.date(2021,4,26)
-clinicsIn = populateClinics("Clinic_Template.xlsx")
+# startDate = datetime.date(2021,4,26)
+# clinicsIn = populateClinics("Clinic_Template.xlsx")
 providersIn = populateProviders("Provider_Template.xlsx")
-clinicsOut = sch.scheduler(providersIn, clinicsIn)
-outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
+print("\n\nUnrandomized:")
+for p in providersIn:
+    print(p.provider_name)
+# clinicsOut = sch.scheduler(providersIn, clinicsIn)
+# outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
+
+# Test code for randomizeList() :
+providersOut = randomizeList(providersIn)
+print("\n\nRandomized:")
+for p in providersOut:
+    print(p.provider_name)
