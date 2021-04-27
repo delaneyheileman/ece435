@@ -156,20 +156,37 @@ def scheduler(Provider_List, Clinic_List):
     shifts = [0, 1]
     slots = [0, 1, 2]
 
+    # First loops through all days within specified date range
     for day in weekdays:
+
+        # Second, loops through all clinics in clinic list
         for clinic in Clinic_List:
+
+            # Third, loops through AM, PM shifts
             for shift in shifts:
+
+                # Forth, loops through all slots
                 for slot in slots:
+
+                    # Fifth, loops through all providers in provider list (list is randomized with priority 0 first
                     for provider in Provider_List:
+                        # Checks if current day is a holiday, if it is assign holiday to all shifts and slots
                         if calendar.index[calendar["Is_Holiday"] == 1].values[0] == day:
                             clinic.week[day][:][:] = "Holiday"
-                        if provider.day_preferences[day][shift] != clinic.clinic_name:
+                        # else if the current provider is not scheduled for current clinic put what they are scheduled
+                        # for in their personal calendar
+                        elif provider.day_preferences[day][shift] != clinic.clinic_name:
                             provider.week[day][shift] = provider.day_preferences[day][shift]
+                        # else continue
                         else:
+                            # checks if current provider has shifts left to work
                             if provider.total_available_hours >= 4:
+                                # checks if there is a slot available for the provider at the current clinic
                                 if clinic.week[day][shift][slot] is None and provider.provider_name not in \
                                         clinic.week[day][shift]:
-
+                                    # checks if the current clinic as room for current provider's specialty. If it
+                                    # does decrement provider's available shifts and add them to the clinics calendar
+                                    # and the provider's own calendar.
                                     if clinic.staff_logic(provider.specialty, day, shift):
                                         provider.total_available_hours = provider.total_available_hours - 4
                                         clinic.week[day][shift][slot] = provider.provider_name
