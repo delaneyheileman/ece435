@@ -4,18 +4,23 @@ import scheduler as sch
 import datetime
 import random
 
-# randomizeList()
+# randomizeProviders()
 # Inputs:
-#     providerList : a list of objects
+#     inputList : a list of scheduler.Provider objects
 # Outputs:
-#     randomList : a list containing the elements of the input list in randomized order
+#     randomList : a list containing the elements of the input list in
+#       psuedo-randomized order with priority 0 objects first
 
-def randomizeList(inputList):
+def randomizeProviders(inputList):
     randomList = []
     numObjects = len(inputList)
     for i in range(numObjects):
         indexSelect = random.randrange(0,len(inputList))
-        randomList.append(inputList.pop(indexSelect))
+        tempProvider = inputList.pop(indexSelect)
+        if (tempProvider.priority == 0):
+            randomList.insert(0,tempProvider)
+        elif(tempProvider.priority == 1):
+            randomList.append(tempProvider)
     return randomList
 
 # populateProviders()
@@ -33,7 +38,8 @@ def populateProviders(filename):
     for i in range(len(provXL.index)):
         currentRow = provXL.loc[i]
         name = currentRow["First"] + " " + currentRow["Last"]
-        spec = currentRow[2]
+        spec = currentRow["Specialty"]
+        priority = currentRow["Priority"]
         # Build empty dayPref array
         dayPref = [[]]
         for n in range(7):
@@ -41,14 +47,14 @@ def populateProviders(filename):
         # Day preferences are in [ [am location,pm location], ...] format
         # AM Day / Location preferences
         for k in range(7):
-            dayPref[k].append(currentRow[3+2*k])
+            dayPref[k].append(currentRow[4+2*k])
         # PM Day / Location preferences
         for l in range(7):
-            dayPref[l].append(currentRow[4+2*l])
+            dayPref[l].append(currentRow[5+2*l])
         # Total available hours
         availHours = currentRow["Hour Limit"]
         # Construct new object and add to providerlist output
-        providerlist.append(sch.Provider(name, spec, dayPref, availHours))
+        providerlist.append(sch.Provider(name, spec, dayPref, availHours, priority))
 
     return providerlist
 
@@ -132,12 +138,12 @@ def outputClinicSchedule(clinicList, fileName, startDate):
 providersIn = populateProviders("Provider_Template.xlsx")
 print("\n\nUnrandomized:")
 for p in providersIn:
-    print(p.provider_name)
+    print(str(p.priority) + " " + p.provider_name)
 # clinicsOut = sch.scheduler(providersIn, clinicsIn)
 # outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
 
 # Test code for randomizeList() :
-providersOut = randomizeList(providersIn)
+providersOut = randomizeProviders(providersIn)
 print("\n\nRandomized:")
 for p in providersOut:
-    print(p.provider_name)
+    print(str(p.priority) + " " + p.provider_name)
