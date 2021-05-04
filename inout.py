@@ -35,24 +35,25 @@ def populateProviders(filename):
 
     provXL = pd.read_excel(filename)
     providerlist = []
+    priorityStoI = {"Fixed":0,"Flexible":1}
     for i in range(len(provXL.index)):
         currentRow = provXL.loc[i]
         name = currentRow["First"] + " " + currentRow["Last"]
         spec = currentRow["Specialty"]
-        priority = currentRow["Priority"]
+        priority = priorityStoI[currentRow["Priority"]]
         # Build empty dayPref array
         dayPref = [[]]
-        for n in range(7):
+        for n in range(14):
             dayPref.append([])
         # Day preferences are in [ [am location,pm location], ...] format
         # AM Day / Location preferences
-        for k in range(7):
-            dayPref[k].append(currentRow[4+2*k])
+        for k in range(14):
+            dayPref[k].append(currentRow[5+2*k])
         # PM Day / Location preferences
-        for l in range(7):
-            dayPref[l].append(currentRow[5+2*l])
+        for l in range(14):
+            dayPref[l].append(currentRow[6+2*l])
         # Total available hours
-        availHours = currentRow["Hour Limit"]
+        availHours = currentRow["Shift Limit"]
         # Construct new object and add to providerlist output
         providerlist.append(sch.Provider(name, spec, dayPref, availHours, priority))
 
@@ -135,7 +136,7 @@ def outputClinicSchedule(clinicList, fileName, startDate):
 # list of Clinic objects (Clinic_List) that it modifies
 # startDate = datetime.date(2021,4,26)
 # clinicsIn = populateClinics("Clinic_Template.xlsx")
-providersIn = populateProviders("Provider_Template.xlsx")
+providersIn = populateProviders("Provider_Preferences.xlsx")
 print("\n\nUnrandomized:")
 for p in providersIn:
     print(str(p.priority) + " " + p.provider_name)
@@ -147,3 +148,4 @@ providersOut = randomizeProviders(providersIn)
 print("\n\nRandomized:")
 for p in providersOut:
     print(str(p.priority) + " " + p.provider_name)
+    print(p.day_preferences)
