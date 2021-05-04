@@ -53,9 +53,9 @@ def populateProviders(filename):
         for l in range(14):
             dayPref[l].append(currentRow[6+2*l])
         # Total available hours
-        availHours = currentRow["Shift Limit"]
+        availShifts = currentRow["Shift Limit"]
         # Construct new object and add to providerlist output
-        providerlist.append(sch.Provider(name, spec, dayPref, availHours, priority))
+        providerlist.append(sch.Provider(name, spec, dayPref, availShifts, priority))
 
     return providerlist
 
@@ -147,5 +147,5 @@ for p in providersIn:
 providersOut = randomizeProviders(providersIn)
 print("\n\nRandomized:")
 for p in providersOut:
-    print(str(p.priority) + " " + p.provider_name)
+    print(str(p.priority) + " " + p.provider_name + " " + str(p.available_shifts))
     print(p.day_preferences)
