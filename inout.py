@@ -27,7 +27,7 @@ def randomizeProviders(inputList):
 # Inputs:
 #   filename : a string with the name of the file containing provider profile information
 # Outputs:
-#     providerList : a list of scheduler.Clinic objects
+#     providerList : a list of scheduler.Provider objects
 #
 # Reads the provider profile data from an excel file (.xlsx) and populates a list
 # of scheduler.Provider objects, then returns this list
@@ -84,6 +84,7 @@ def populateClinics(filename):
 
     return clinicList
 
+
 # outputClinicSchedule()
 # Inputs:
 #   clinicList : a list of scheduler.Clinic objects
@@ -105,7 +106,7 @@ def outputClinicSchedule(clinicList, fileName, startDate):
             colHeaders.append(clinic.clinic_name + " " + str(i+1))
     # Row labels, each row is a day, label format "Weekday {mo}/{day}"
     dayStrings = []
-    for i in range(7):
+    for i in range(14):
         tempDay = startDate + datetime.timedelta(days=i)
         dayStrings.append(weekdays[tempDay.weekday()] + " " + str(tempDay.month) +
         "/" + str(tempDay.day) + " AM")
@@ -116,7 +117,7 @@ def outputClinicSchedule(clinicList, fileName, startDate):
     schedOut = pd.DataFrame(columns=colHeaders)
     rowCounter = 0;
 
-    for day in range(7):
+    for day in range(14):
         for shift in range(2):
             row = []
             row.append(dayStrings[rowCounter])
@@ -130,22 +131,26 @@ def outputClinicSchedule(clinicList, fileName, startDate):
     schedOutXL.to_excel(fileName)
     return;
 
-
+###
 # Test code for outputClinicSchedule()
 # This test requires that the scheduler.scheduler() function return the
 # list of Clinic objects (Clinic_List) that it modifies
-# startDate = datetime.date(2021,4,26)
-# clinicsIn = populateClinics("Clinic_Template.xlsx")
+
+startDate = sch.find_next_monday()
+print(startDate)
+clinicsIn = populateClinics("Clinic_Template.xlsx")
+
 providersIn = populateProviders("Provider_Preferences.xlsx")
 print("\n\nUnrandomized:")
 for p in providersIn:
     print(str(p.priority) + " " + p.provider_name)
-# clinicsOut = sch.scheduler(providersIn, clinicsIn)
-# outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
+clinicsOut = sch.scheduler(providersIn, clinicsIn,startDate)
+outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
 
+###
 # Test code for randomizeList(), read 14 days and read available shifts:
-providersOut = randomizeProviders(providersIn)
-print("\n\nRandomized:")
-for p in providersOut:
-    print(str(p.priority) + " " + p.provider_name + " " + str(p.shifts))
-    print(p.day_preferences)
+# providersOut = randomizeProviders(providersIn)
+# print("\n\nRandomized:")
+# for p in providersOut:
+#     print(str(p.priority) + " " + p.provider_name + " " + str(p.shifts))
+#     print(p.day_preferences)
