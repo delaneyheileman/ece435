@@ -37,11 +37,11 @@ def calendar_generator(Year, Start_Month, End_Month, Start_Day, End_Day):
 # class object of providers.
 
 class Provider:
-    def __init__(self, provider_name, specialty, day_preferences, total_available_hours, priority):
+    def __init__(self, provider_name, specialty, day_preferences, available_shifts, priority):
         self.provider_name = provider_name
         self.specialty = specialty
         self.day_preferences = day_preferences
-        self.total_available_hours = total_available_hours
+        self.available_shifts = available_shifts
         self.week = np.empty(shape=(7, 2), dtype="object")
         self.priority = priority
 
@@ -178,7 +178,7 @@ def scheduler(Provider_List, Clinic_List):
                         # else continue
                         else:
                             # checks if current provider has shifts left to work
-                            if provider.total_available_hours >= 4:
+                            if provider.available_shifts >= 1:
                                 # checks if there is a slot available for the provider at the current clinic
                                 if clinic.week[day][shift][slot] is None and provider.provider_name not in \
                                         clinic.week[day][shift]:
@@ -186,7 +186,7 @@ def scheduler(Provider_List, Clinic_List):
                                     # does decrement provider's available shifts and add them to the clinics calendar
                                     # and the provider's own calendar.
                                     if clinic.staff_logic(provider.specialty, day, shift):
-                                        provider.total_available_hours = provider.total_available_hours - 4
+                                        provider.available_shifts = provider.available_shifts - 1
                                         clinic.week[day][shift][slot] = provider.provider_name
                                         provider.week[day][shift] = provider.day_preferences
 
