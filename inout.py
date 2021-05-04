@@ -1,4 +1,4 @@
-#last UD 4/26/2021 4:09 PM
+#last UD 5/4/2021 1:23 PM
 import pandas as pd
 import scheduler as sch
 import datetime
@@ -53,9 +53,9 @@ def populateProviders(filename):
         for l in range(14):
             dayPref[l].append(currentRow[6+2*l])
         # Total available hours
-        availShifts = currentRow["Shift Limit"]
+        shifts = currentRow["Shift Limit"]
         # Construct new object and add to providerlist output
-        providerlist.append(sch.Provider(name, spec, dayPref, availShifts, priority))
+        providerlist.append(sch.Provider(name, spec, dayPref, shifts, priority))
 
     return providerlist
 
@@ -143,9 +143,9 @@ for p in providersIn:
 # clinicsOut = sch.scheduler(providersIn, clinicsIn)
 # outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
 
-# Test code for randomizeList() :
+# Test code for randomizeList(), read 14 days and read available shifts:
 providersOut = randomizeProviders(providersIn)
 print("\n\nRandomized:")
 for p in providersOut:
-    print(str(p.priority) + " " + p.provider_name + " " + str(p.available_shifts))
+    print(str(p.priority) + " " + p.provider_name + " " + str(p.shifts))
     print(p.day_preferences)
