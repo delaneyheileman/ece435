@@ -3,7 +3,7 @@ import pandas as pd
 import holidays
 import datetime
 from calendar import monthrange
-from inout import outputClinicSchedule
+import inout
 
 
 def find_next_monday():
@@ -216,7 +216,7 @@ def scheduler(Provider_List, Clinic_List):
                                         clinic.week[day][shift][slot] = provider.provider_name
                                         provider.week[day][shift] = provider.day_preferences
 
-    outputClinicSchedule(Clinic_List, "may5ClinicSched.xlsx", nextMonday)
+    inout.outputClinicSchedule(Clinic_List, "may5ClinicSched.xlsx", nextMonday)
     # for clinic in Clinic_List:
     #     print("\n")
     #     print(clinic.clinic_name)
