@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-
 from scheduler import scheduler
 from inout import populateProviders
 from inout import populateClinics

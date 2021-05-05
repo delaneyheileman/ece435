@@ -24,6 +24,7 @@ def find_next_monday():
 
 # generates a calender based on inputs above
 
+
 def calendar_generator():
     dstart, mstart, cyear = find_next_monday()
     day_start, month_start, year = int(dstart), int(mstart), int(cyear)
@@ -39,7 +40,7 @@ def calendar_generator():
     us_holidays = []  # array for holidays
 
     # finds federal holidays in specified year
-    for date in holidays.UnitedStates(years=cyear).items():
+    for date in holidays.UnitedStates(years=year).items():
         us_holidays.append(str(date[0]))
 
     # creates a time frame based on inputs
@@ -56,6 +57,7 @@ def calendar_generator():
 
 
 # class object of providers.
+
 
 class Provider:
     def __init__(self, provider_name, specialty, day_preferences, shifts, priority):
@@ -78,9 +80,9 @@ class Clinic:
         self.idl_aud = idl_aud
         self.max_staff = max_staff
         # counters for each specialty on each shift and day
-        self.ped_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
-        self.aud_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
-        self.max_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+        self.ped_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+        self.aud_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+        self.max_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
         # clinic centric calendar days,shifts,amount of slots
         self.week = np.empty(shape=(14, 2, max_staff), dtype="object")
 
@@ -188,7 +190,7 @@ def scheduler(Provider_List, Clinic_List):
                     # Fifth, loops through all providers in provider list (list is randomized with priority 0 first
                     for provider in Provider_List:
                         # Checks if current day is a holiday, if it is assign holiday to all shifts and slots
-                        if calendar.index[calendar["Is_Holiday"] == 1].values[0] == day:
+                        if calendar.index[calendar["Is_Holiday"] == 1] == day:
                             clinic.week[day][:][:] = "Holiday"
                         # else if the current provider is not scheduled for current clinic put what they are scheduled
                         # for in their personal calendar
