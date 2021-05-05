@@ -1,8 +1,13 @@
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
+from scheduler import scheduler
+from inout import populateProviders
+from inout import populateClinics
+
+
 def open_provider():
-    """Open a file for editing."""
+    global provider_filepath
     provider_filepath = askopenfilename(
         filetypes=[("Excel Files", "*.xlsx")]
     )
@@ -10,16 +15,23 @@ def open_provider():
         return
     lbl_provider["text"] = provider_filepath
 
+
+
 def open_clinic():
+    global clinic_filepath
     """Open a file for editing."""
     clinic_filepath = askopenfilename(
         filetypes=[("Excel Files", "*.xlsx")]
     )
     if not clinic_filepath:
         return
-    lbl_clinic["text"] = clinic_filepath   
+    # cliniclist = populateClinics(clinic_filepath)
+    lbl_clinic["text"] = clinic_filepath
 
 def run():
+    providerlist = populateProviders(provider_filepath)
+    cliniclist = populateClinics(clinic_filepath)
+    scheduler(providerlist, cliniclist)
     lbl_result["text"] = f"Scheduler Ran Successfully"
 
 
