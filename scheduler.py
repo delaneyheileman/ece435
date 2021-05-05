@@ -28,9 +28,9 @@ def find_next_monday():
 # generates a calender based on inputs above
 
 
-def calendar_generator():
+def calendar_generator(startDate):
     # dstart, mstart, cyear = find_next_monday()
-    startDate = find_next_monday()
+    # startDate = find_next_monday()
     day_start, month_start, year = int(startDate.day), int(startDate.month), int(startDate.year)
     day_end = day_start + 13
 
@@ -174,7 +174,8 @@ def provider_printer(clnc):
 
 
 def scheduler(Provider_List, Clinic_List):
-    calendar = calendar_generator()
+    nextMonday = find_next_monday()
+    calendar = calendar_generator(nextMonday)
     weekdays = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     shifts = [0, 1]
     slots = [0, 1, 2]
@@ -215,7 +216,7 @@ def scheduler(Provider_List, Clinic_List):
                                         clinic.week[day][shift][slot] = provider.provider_name
                                         provider.week[day][shift] = provider.day_preferences
 
-outputClinicSchedule()
+    outputClinicSchedule(Clinic_List, "may5ClinicSched.xlsx", nextMonday)
     # for clinic in Clinic_List:
     #     print("\n")
     #     print(clinic.clinic_name)
