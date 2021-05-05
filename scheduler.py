@@ -63,7 +63,7 @@ class Provider:
         self.specialty = specialty
         self.day_preferences = day_preferences
         self.shifts = shifts
-        self.week = np.empty(shape=(7, 2), dtype="object")
+        self.week = np.empty(shape=(14, 2), dtype="object")
         self.priority = priority
 
 
@@ -82,7 +82,7 @@ class Clinic:
         self.aud_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
         self.max_counter = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
         # clinic centric calendar days,shifts,amount of slots
-        self.week = np.empty(shape=(7, 2, max_staff), dtype="object")
+        self.week = np.empty(shape=(14, 2, max_staff), dtype="object")
 
     # this class function increments clinic counters based on specialties
     def specialty_incrementer(self, specialty, d, s):
