@@ -4,18 +4,10 @@ import holidays
 import datetime
 from calendar import monthrange
 
-# Date inputs for calendar generator
-
-
-# year = 2021
-# month_start = 1
-# month_end = 1
-# day_start = 17
-# day_end = 23
 
 def find_next_monday():
     today = datetime.date.today()
-    if (today.weekday() == 0):
+    if today.weekday() == 0:
         year = today.strftime("%Y")
         month = today.strftime("%m")
         today = today.strftime("%d")
@@ -23,34 +15,36 @@ def find_next_monday():
     else:
         for d in range(7):
             day = today + datetime.timedelta(days=d)
-            if (day.weekday() == 0):
+            if day.weekday() == 0:
                 year = day.strftime("%Y")
                 month = day.strftime("%m")
                 day = day.strftime("%d")
                 return day, month, year
 
-Dstart, Mstart, Cyear = find_next_monday()
-day_start, month_start, year = int(Dstart), int(Mstart), int(Cyear)
-day_end = day_start + 13
-if (monthrange(year, month_start)[1] - day_start) > 14:
-    month_end = month_start
-else:
-    month_end = month_start + 1
-    if day_end > monthrange(year, month_start)[1]:
-        day_end = day_end - monthrange(year, month_start)[1]
 
 # generates a calender based on inputs above
 
-def calendar_generator(Year, Start_Month, End_Month, Start_Day, End_Day):
+def calendar_generator():
+    dstart, mstart, cyear = find_next_monday()
+    day_start, month_start, year = int(dstart), int(mstart), int(cyear)
+    day_end = day_start + 13
+
+    if (monthrange(year, month_start)[1] - day_start) > 14:
+        month_end = month_start
+    else:
+        month_end = month_start + 1
+        if day_end > monthrange(year, month_start)[1]:
+            day_end = day_end - monthrange(year, month_start)[1]
+
     us_holidays = []  # array for holidays
 
     # finds federal holidays in specified year
-    for date in holidays.UnitedStates(years=Year).items():
+    for date in holidays.UnitedStates(years=cyear).items():
         us_holidays.append(str(date[0]))
 
     # creates a time frame based on inputs
-    start_date = datetime.datetime(year=Year, month=Start_Month, day=Start_Day)
-    end_date = datetime.datetime(year=Year, month=End_Month, day=End_Day)
+    start_date = datetime.datetime(year=year, month=month_start, day=day_start)
+    end_date = datetime.datetime(year=year, month=month_end, day=day_end)
 
     # creates data frame and adds holidays to time frame. Final result is a two week period with federal holidays
     date_frame = pd.DataFrame()
@@ -174,7 +168,7 @@ def provider_printer(clnc):
 
 
 def scheduler(Provider_List, Clinic_List):
-    calendar = calendar_generator(year, month_start, month_end, day_start, day_end)
+    calendar = calendar_generator()
     weekdays = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     shifts = [0, 1]
     slots = [0, 1, 2]
@@ -211,14 +205,14 @@ def scheduler(Provider_List, Clinic_List):
                                     # does decrement provider's available shifts and add them to the clinics calendar
                                     # and the provider's own calendar.
                                     if clinic.staff_logic(provider.specialty, day, shift):
-                                        provider.shifts = shifts - 1
+                                        provider.shifts = provider.shifts - 1
                                         clinic.week[day][shift][slot] = provider.provider_name
                                         provider.week[day][shift] = provider.day_preferences
 
-    for clinic in Clinic_List:
-        print("\n")
-        print(clinic.clinic_name)
-        clinic_printer(clinic.week)
+    # for clinic in Clinic_List:
+    #     print("\n")
+    #     print(clinic.clinic_name)
+    #     clinic_printer(clinic.week)
 
     # for provider in Provider_List:
     #     print("\n")

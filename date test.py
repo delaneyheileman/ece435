@@ -5,13 +5,6 @@ import datetime
 from calendar import monthrange
 
 
-# year = 2021
-# month_start = 1
-# month_end = 5
-# day_start = 10
-# day_start = 17
-# day_end = 23
-
 def find_next_monday():
     today = datetime.date.today()
     if (today.weekday() == 0):
