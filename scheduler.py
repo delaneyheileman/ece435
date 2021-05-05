@@ -216,11 +216,7 @@ def scheduler(Provider_List, Clinic_List):
                                         clinic.week[day][shift][slot] = provider.provider_name
                                         provider.week[day][shift] = provider.day_preferences
 
-<<<<<<< HEAD
     outputClinicSchedule(Clinic_List, nextMonday)
-=======
-    inout.outputClinicSchedule(Clinic_List, "may5ClinicSched.xlsx", nextMonday)
->>>>>>> ee26c5bc139aff81784819f54b6dfe8fca5d5e78
     # for clinic in Clinic_List:
     #     print("\n")
     #     print(clinic.clinic_name)
