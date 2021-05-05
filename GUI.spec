@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['GUI.py'],
-             pathex=['/Users/benjaminrutherford/PycharmProjects/ece435'],
+             pathex=['/Users/benjaminrutherford/Documents/PycharmProjects/ECE_435'],
              binaries=[],
              datas=[],
              hiddenimports=[],
