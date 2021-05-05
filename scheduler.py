@@ -2,26 +2,42 @@ import numpy as np
 import pandas as pd
 import holidays
 import datetime
+from calendar import monthrange
 
 # Date inputs for calendar generator
-#yo
 
 
-year = 2021
-month_start = 1
-month_end = 1
-day_start = 17
-day_end = 23
+# year = 2021
+# month_start = 1
+# month_end = 1
+# day_start = 17
+# day_end = 23
 
 def find_next_monday():
     today = datetime.date.today()
     if (today.weekday() == 0):
-        return today
+        year = today.strftime("%Y")
+        month = today.strftime("%m")
+        today = today.strftime("%d")
+        return today, month, year
     else:
         for d in range(7):
-            day = today +datetime.timedelta(days=d)
+            day = today + datetime.timedelta(days=d)
             if (day.weekday() == 0):
-                return day
+                year = day.strftime("%Y")
+                month = day.strftime("%m")
+                day = day.strftime("%d")
+                return day, month, year
+
+Dstart, Mstart, Cyear = find_next_monday()
+day_start, month_start, year = int(Dstart), int(Mstart), int(Cyear)
+day_end = day_start + 13
+if (monthrange(year, month_start)[1] - day_start) > 14:
+    month_end = month_start
+else:
+    month_end = month_start + 1
+    if day_end > monthrange(year, month_start)[1]:
+        day_end = day_end - monthrange(year, month_start)[1]
 
 # generates a calender based on inputs above
 
