@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-from scheduler import scheduler
-from inout import populateProviders
-from inout import populateClinics
+import scheduler
+import inout
+
 
 
 def open_provider():
@@ -28,9 +28,9 @@ def open_clinic():
     lbl_clinic["text"] = clinic_filepath
 
 def run():
-    providerlist = populateProviders(provider_filepath)
-    cliniclist = populateClinics(clinic_filepath)
-    scheduler(providerlist, cliniclist)
+    providerlist = inout.populateProviders(provider_filepath)
+    cliniclist = inout.populateClinics(clinic_filepath)
+    scheduler.scheduler(providerlist, cliniclist)
     lbl_result["text"] = f"Scheduler Ran Successfully"
 
 
