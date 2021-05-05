@@ -144,7 +144,7 @@ providersIn = populateProviders("Provider_Preferences.xlsx")
 print("\n\nUnrandomized:")
 for p in providersIn:
     print(str(p.priority) + " " + p.provider_name)
-clinicsOut = sch.scheduler(providersIn, clinicsIn,startDate)
+clinicsOut = sch.scheduler(providersIn, clinicsIn)
 outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
 
 ###
