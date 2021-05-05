@@ -1,3 +1,0 @@
-([('GUI',
-   '/Users/benjaminrutherford/Documents/PycharmProjects/ECE_435/dist/GUI',
-   'EXECUTABLE')],)
