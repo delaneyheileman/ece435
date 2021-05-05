@@ -9,26 +9,29 @@ from inout import outputClinicSchedule
 def find_next_monday():
     today = datetime.date.today()
     if today.weekday() == 0:
-        year = today.strftime("%Y")
-        month = today.strftime("%m")
-        today = today.strftime("%d")
-        return today, month, year
+        # year = today.strftime("%Y")
+        # month = today.strftime("%m")
+        # today = today.strftime("%d")
+        # return today, month, year
+        return today
     else:
         for d in range(7):
             day = today + datetime.timedelta(days=d)
             if day.weekday() == 0:
-                year = day.strftime("%Y")
-                month = day.strftime("%m")
-                day = day.strftime("%d")
-                return day, month, year
+                # year = day.strftime("%Y")
+                # month = day.strftime("%m")
+                # day = day.strftime("%d")
+                # return day, month, year
+                return day
 
 
 # generates a calender based on inputs above
 
 
 def calendar_generator():
-    dstart, mstart, cyear = find_next_monday()
-    day_start, month_start, year = int(dstart), int(mstart), int(cyear)
+    # dstart, mstart, cyear = find_next_monday()
+    startDate = find_next_monday()
+    day_start, month_start, year = int(startDate.day), int(startDate.month), int(startDate.year)
     day_end = day_start + 13
 
     if (monthrange(year, month_start)[1] - day_start) > 14:
