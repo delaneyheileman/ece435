@@ -95,8 +95,12 @@ def populateClinics(filename):
 #
 # Overwrites (or creates if it doesn't exist) an excel file with the
 # schedule contained in the week attributes of the Clinic objects in clinicList
-def outputClinicSchedule(clinicList, fileName, startDate):
+# def outputClinicSchedule(clinicList, fileName, startDate):
+def outputClinicSchedule(clinicList, startDate):
+    fileName = startDate.strftime("%b_%d_%Y_") + "Schedule.xlsx"
     file = open(fileName, "w")
+    file.close()
+
     # In the datetime module, Monday = 0 and Sunday = 6
     weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     colHeaders = []
@@ -129,7 +133,22 @@ def outputClinicSchedule(clinicList, fileName, startDate):
             rowCounter += 1
 
     schedOutXL = schedOut.set_index('Day', drop=True)
-    schedOutXL.to_excel(fileName)
+    writer = pd.ExcelWriter(fileName, engine = 'xlsxwriter')
+    schedOutXL.to_excel(writer, sheet_name = 'Sheet1')
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    worksheet.set_column('A:J',18)
+    bgGreen = workbook.add_format({'bg_color':'#92D050'})
+    bgOrange = workbook.add_format({'bg_color':'#FFC000'})
+    worksheet.conditional_format('A2:A29',
+        {'type':'formula',
+        'criteria':'=MOD(ROW(),4)<=1',
+        'format':bgGreen})
+    worksheet.conditional_format('A2:A29',
+        {'type':'formula',
+        'criteria':'=MOD(ROW(),4)>1',
+        'format':bgOrange})
+    writer.save()
     return;
 
 
