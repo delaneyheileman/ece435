@@ -140,14 +140,21 @@ def outputClinicSchedule(clinicList, startDate):
     worksheet.set_column('A:J',18)
     bgGreen = workbook.add_format({'bg_color':'#92D050'})
     bgOrange = workbook.add_format({'bg_color':'#FFC000'})
+    bgGray = workbook.add_format({'bg_color':'#BFBFBF'})
     worksheet.conditional_format('A2:A29',
         {'type':'formula',
         'criteria':'=MOD(ROW(),4)<=1',
         'format':bgGreen})
+
     worksheet.conditional_format('A2:A29',
         {'type':'formula',
         'criteria':'=MOD(ROW(),4)>1',
         'format':bgOrange})
+
+    worksheet.conditional_format('B1:J1',
+        {'type':'formula',
+        'criteria':'=MOD(COLUMN()-2,6)<3',
+        'format':bgGray})
     writer.save()
     return;
 
