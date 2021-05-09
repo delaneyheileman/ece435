@@ -1,3 +1,16 @@
+# ************************************************************************
+# * This module produces the scheduler logic from input from inout
+# *
+# * COMPONENT NAME: scheduler.py
+# *
+# * VERSION: 3.0 (April 2021)
+# *
+# * Module Description
+# * This module takes two arrays as inputs from inout and returns an array
+# * to inout.
+# * **********************************************************************/
+
+
 import numpy as np
 import pandas as pd
 import holidays
@@ -6,31 +19,21 @@ from calendar import monthrange
 import inout
 
 
+# This function finds the next monday from the day of program execution. This is done to sync with excel input
 def find_next_monday():
     today = datetime.date.today()
     if today.weekday() == 0:
-        # year = today.strftime("%Y")
-        # month = today.strftime("%m")
-        # today = today.strftime("%d")
-        # return today, month, year
         return today
     else:
         for d in range(7):
             day = today + datetime.timedelta(days=d)
             if day.weekday() == 0:
-                # year = day.strftime("%Y")
-                # month = day.strftime("%m")
-                # day = day.strftime("%d")
-                # return day, month, year
                 return day
 
 
-# generates a calender based on inputs above
-
+# This function generates a 14 day calender based on object created by find_next_monday. This calendar includes holidays
 
 def calendar_generator(startDate):
-    # dstart, mstart, cyear = find_next_monday()
-    # startDate = find_next_monday()
     day_start, month_start, year = int(startDate.day), int(startDate.month), int(startDate.year)
     day_end = day_start + 13
 
@@ -61,8 +64,6 @@ def calendar_generator(startDate):
 
 
 # class object of providers.
-
-
 class Provider:
     def __init__(self, provider_name, specialty, day_preferences, shifts, priority):
         self.provider_name = provider_name
@@ -150,29 +151,8 @@ class Satellite_clinic(Clinic):
             return False
 
 
-def clinic_printer(clnc):
-    out = np.transpose(clnc)
-    out = np.array(out)
-
-    print("AM")
-    print(out[0][0])
-    print(out[1][0])
-    print(out[2][0])
-    print("\nPM")
-    print(out[0][1])
-    print(out[1][1])
-    print(out[2][1])
-
-
-def provider_printer(clnc):
-    out = np.transpose(clnc)
-    out = np.array(out)
-    print("AM")
-    print(out[0][:])
-    print("\nPM")
-    print(out[1][:])
-
-
+#  main function. This function calls all above functions to create a calendar based on inputs and logic defined in
+#  clinic classes.
 def scheduler(Provider_List, Clinic_List):
     nextMonday = find_next_monday()
     calendar = calendar_generator(nextMonday)
@@ -215,14 +195,5 @@ def scheduler(Provider_List, Clinic_List):
                                         provider.shifts = provider.shifts - 1
                                         clinic.week[day][shift][slot] = provider.provider_name
                                         provider.week[day][shift] = provider.day_preferences
-
+    # calls inout output to create output excel file.
     inout.outputClinicSchedule(Clinic_List, nextMonday)
-    # for clinic in Clinic_List:
-    #     print("\n")
-    #     print(clinic.clinic_name)
-    #     clinic_printer(clinic.week)
-
-    # for provider in Provider_List:
-    #     print("\n")
-    #     print(provider.provider_name)
-    #     provider_printer(provider.week)
