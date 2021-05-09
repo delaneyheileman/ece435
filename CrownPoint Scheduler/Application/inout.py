@@ -1,16 +1,25 @@
-# last UD 5/4/2021 1:23 PM
+# ************************************************************************
+# * This module implements the system's interface with external files.
+# *
+# *
+# * COMPONENT NAME: inout.py
+# *
+# * VERSION: 3.0 (April 2021)
+# *
+# * Module Description
+# *  This module takes file names and lists of objects from the scheduler module as
+# * inputs, and outputs lists of objects. This module creates, reads, and writes .xlsx
+# * files.
+# * **********************************************************************/
+
 import pandas as pd
 import scheduler as sch
 import datetime
 import random
 
-
-# randomizeProviders()
-# Inputs:
-#     inputList : a list of scheduler.Provider objects
-# Outputs:
-#     randomList : a list containing the elements of the input list in
-#       psuedo-randomized order with priority 0 objects first
+# This function takes a list of scheduler.Provider objects as inputs and
+# returns the objects from the list in a randomized order, with Providers
+# whose priority is 0 at the head of the list and 1 at the tail.
 
 def randomizeProviders(inputList):
     randomList = []
@@ -25,14 +34,8 @@ def randomizeProviders(inputList):
     return randomList
 
 
-# populateProviders()
-# Inputs:
-#   filename : a string with the name of the file containing provider profile information
-# Outputs:
-#     providerList : a list of scheduler.Provider objects
-#
-# Reads the provider profile data from an excel file (.xlsx) and populates a list
-# of scheduler.Provider objects, then returns this list
+# This function reads the provider profile data from an excel file (.xlsx) and
+# populates a list of scheduler.Provider objects, then returns this list
 def populateProviders(filename):
     provXL = pd.read_excel(filename)
     providerlist = []
@@ -61,14 +64,8 @@ def populateProviders(filename):
     return providerlist
 
 
-# populateClinics()
-# Inputs:
-#   filename : a string with the name of the file containing clinic profile information
-# Outputs:
-#     clinicList : a list of scheduler.Clinic objects
-#
-# Reads the clinic profile data from an excel file (.xlsx) and populates a list
-# of scheduler.Clinic objects, then returns this list
+# This function reads the clinic profile data from an excel file (.xlsx) and
+# populates a list of scheduler.Clinic objects, then returns this list.
 
 def populateClinics(filename):
     clinicXL = pd.read_excel(filename)
@@ -86,17 +83,11 @@ def populateClinics(filename):
     return clinicList
 
 
-# outputClinicSchedule()
-# Inputs:
-#   clinicList : a list of scheduler.Clinic objects
-#   fileName : a string with the target excel file name
-#   startDate : a datetime.date object with the starting date of the schedule
-# Outputs: None
-#
-# Overwrites (or creates if it doesn't exist) an excel file with the
+# This function overwrites (or creates if it doesn't exist) an excel file with the
 # schedule contained in the week attributes of the Clinic objects in clinicList
-# def outputClinicSchedule(clinicList, fileName, startDate):
+
 def outputClinicSchedule(clinicList, startDate):
+    #Create dynamic file name string, create file if it doesn't exist
     fileName = startDate.strftime("%b_%d_%Y_") + "Schedule.xlsx"
     file = open(fileName, "w")
     file.close()
@@ -122,6 +113,7 @@ def outputClinicSchedule(clinicList, startDate):
     schedOut = pd.DataFrame(columns=colHeaders)
     rowCounter = 0;
 
+    #Iterate through days, shifts, clinics, slots
     for day in range(14):
         for shift in range(2):
             row = []
@@ -131,16 +123,20 @@ def outputClinicSchedule(clinicList, startDate):
                     row.append(clinic.week[day][shift][slot])
             schedOut.loc[rowCounter] = row;
             rowCounter += 1
-
+    # Set the index of the pandas dataframe to be the Day column
     schedOutXL = schedOut.set_index('Day', drop=True)
+    # Create an ExcelWriter object and set it to write to the file's first sheet
     writer = pd.ExcelWriter(fileName, engine = 'xlsxwriter')
     schedOutXL.to_excel(writer, sheet_name = 'Sheet1')
     workbook = writer.book
     worksheet = writer.sheets['Sheet1']
+    #Set column widths
     worksheet.set_column('A:J',18)
+    #Define formats
     bgGreen = workbook.add_format({'bg_color':'#92D050'})
     bgOrange = workbook.add_format({'bg_color':'#FFC000'})
     bgGray = workbook.add_format({'bg_color':'#BFBFBF'})
+    #Set first cell fill colors (Day cells) alternating by 2
     worksheet.conditional_format('A2:A29',
         {'type':'formula',
         'criteria':'=MOD(ROW(),4)<=1',
@@ -150,35 +146,11 @@ def outputClinicSchedule(clinicList, startDate):
         {'type':'formula',
         'criteria':'=MOD(ROW(),4)>1',
         'format':bgOrange})
-
+    #Set column header fill colors alternating by 3
     worksheet.conditional_format('B1:J1',
         {'type':'formula',
         'criteria':'=MOD(COLUMN()-2,6)<3',
         'format':bgGray})
+    #Save and close file
     writer.save()
     return;
-
-
-###
-# Test code for outputClinicSchedule()
-# This test requires that the scheduler.scheduler() function return the
-# list of Clinic objects (Clinic_List) that it modifies
-
-# startDate = sch.find_next_monday()
-# print(startDate)
-# clinicsIn = populateClinics("Clinic_Template.xlsx")
-#
-# providersIn = populateProviders("Provider_Preferences.xlsx")
-# print("\n\nUnrandomized:")
-# for p in providersIn:
-#     print(str(p.priority) + " " + p.provider_name)
-# clinicsOut = sch.scheduler(providersIn, clinicsIn)
-# outputClinicSchedule(clinicsOut, "ClinicScheduleTest.xlsx", startDate)
-
-###
-# Test code for randomizeList(), read 14 days and read available shifts:
-# providersOut = randomizeProviders(providersIn)
-# print("\n\nRandomized:")
-# for p in providersOut:
-#     print(str(p.priority) + " " + p.provider_name + " " + str(p.shifts))
-#     print(p.day_preferences)
